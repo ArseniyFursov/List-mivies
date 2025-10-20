@@ -1,4 +1,3 @@
-const localStorageFilms = [];
 
 const addNameInputNode = document.querySelector('.js-add-name-movie');
 const btnAddNewMovieNode = document.querySelector('.js-add-new-movie');
@@ -10,7 +9,6 @@ const radioRemovedClass = 'radio-removed';
 const nameMovieRemovedClass = 'name-movie-removed';
 
 btnAddNewMovieNode.addEventListener('click', function() {
-    addNewMovieInStorage();
     render();
 });
 
@@ -22,12 +20,8 @@ function getNameFromInput() {
     return addNameInputNode.value;
 };
 
-function addNewMovieInStorage() {
-    localStorageFilms.push(getNameFromInput());
-};
-
 function render() {
-    renderStorageList(localStorageFilms);
+    renderStorageList();
     renderClearInput();
 };
 
@@ -35,10 +29,10 @@ function renderClearInput() {
     addNameInputNode.value = '';
 };
 
-function renderStorageList(localStorageFilms) {
+function renderStorageList() {
     let listStorageFilms = ``
-    localStorageFilms.forEach(el => {
-        listStorageFilms += 
+    const el = getNameFromInput();
+    listStorageFilms = 
         `<div class="wrapper-movie">
             <div class="wrapper-movies">
                 <div class="wrapper-radio-movie"></div>
@@ -49,20 +43,21 @@ function renderStorageList(localStorageFilms) {
             <div class="wrapper-remove-movie">
                 <button class="js-remove-movie remove-movie"></button>
             </div>
-        </div>`
-    });
-    mainListMoviesNode.innerHTML = listStorageFilms;
+        </div>` + listStorageFilms;
+    mainListMoviesNode.innerHTML += listStorageFilms;
 };
 
-mainListMoviesNode.addEventListener('click', function(event) {
-    let eventTarget = event.target;
-    if (eventTarget.closest('.js-remove-movie')) {
-        const radioRemovedNode = document.querySelector('.wrapper-radio-movie').classList.add(radioRemovedClass);
-        const wrapperMovieNode = document.querySelector('.wrapper-movie').classList.add(wrapperMovieClass);
-        const nameMovieRemovedNode = document.querySelector('.name-movie').classList.add(nameMovieRemovedClass);
+mainListMoviesNode.addEventListener('click', event => {
+    if (event.target.classList.contains('wrapper-radio-movie')) {
+        const wrapperMovie = event.target.closest('.wrapper-movie');
+        const nameMovie = wrapperMovie.querySelector('.name-movie');
+        const radioMovie = event.target;
+        wrapperMovie.classList.add(wrapperMovieClass);
+        nameMovie.classList.add(nameMovieRemovedClass);
+        radioMovie.classList.add(radioRemovedClass);
     }
-})
-
-function rendrRemoveMovie() {
-    
-};
+    if (event.target.classList.contains('remove-movie')) {
+       const wrapperMovie = event.target.closest('.wrapper-movie');
+       wrapperMovie.remove();
+    }
+});
