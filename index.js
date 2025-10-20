@@ -54,15 +54,17 @@ function renderStorageList(localStorageFilms) {
     mainListMoviesNode.innerHTML = listStorageFilms;
 };
 
-mainListMoviesNode.addEventListener('click', function(event) {
-    let eventTarget = event.target;
-    if (eventTarget.closest('.js-remove-movie')) {
-        const radioRemovedNode = document.querySelector('.wrapper-radio-movie').classList.add(radioRemovedClass);
-        const wrapperMovieNode = document.querySelector('.wrapper-movie').classList.add(wrapperMovieClass);
-        const nameMovieRemovedNode = document.querySelector('.name-movie').classList.add(nameMovieRemovedClass);
+mainListMoviesNode.addEventListener('click', event => {
+    if (event.target.classList.contains('wrapper-radio-movie')) {
+        const wrapperMovie = event.target.closest('.wrapper-movie');
+        const nameMovie = wrapperMovie.querySelector('.name-movie');
+        const radioMovie = event.target;
+        wrapperMovie.classList.add(wrapperMovieClass);
+        nameMovie.classList.add(nameMovieRemovedClass);
+        radioMovie.classList.add(radioRemovedClass);
     }
-})
-
-function rendrRemoveMovie() {
-    
-};
+    if (event.target.classList.contains('remove-movie')) {
+       const wrapperMovie = event.target.closest('.wrapper-movie');
+       wrapperMovie.remove();
+    }
+});
